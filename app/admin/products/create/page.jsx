@@ -29,6 +29,7 @@ import { X, Upload, Image as ImageIcon } from "lucide-react";
 // Updated schema to include images (files)
 const productSchema = z.object({
   name: z.string().min(1, "Product name is required").trim(),
+  sku: z.string().optional().nullable(),
   regularPrice: z.coerce.number().min(0.01, "Regular price must be greater than 0"),
   salePrice: z.coerce.number().min(0).optional(),
   stock: z.coerce.number().int().min(0).optional(),
@@ -72,6 +73,7 @@ export default function AddProduct() {
     resolver: zodResolver(productSchema),
     defaultValues: {
       name: "",
+      sku: "",
       regularPrice: "",
       salePrice: "",
       stock: "",
@@ -188,6 +190,7 @@ export default function AddProduct() {
 
       // Append text fields
       formData.append("name", data.name.trim());
+      if (data.sku) formData.append("sku", data.sku.trim());
       formData.append("regularPrice", parseFloat(data.regularPrice));
       if (data.salePrice) formData.append("salePrice", parseFloat(data.salePrice));
       formData.append("stock", data.stock ? parseInt(data.stock) : 0);
@@ -265,6 +268,23 @@ export default function AddProduct() {
                       <FormLabel>Product Name</FormLabel>
                       <FormControl>
                         <Input placeholder="e.g. Yamaha Drive2 PTV" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="sku"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>SKU</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="e.g. jamtee-lgheather-navy-xxl-665871194038"
+                          {...field}
+                          value={field.value ?? ""}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

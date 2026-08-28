@@ -1,3 +1,16 @@
-[00:00:20.207] Server  LOG     ✓ Ready in 12.5s
-[00:00:23.266] Server  LOG     ○ Compiling / ...
-[00:00:28.698] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:20.460] Server  LOG     ✓ Ready in 12.9s
+[00:00:23.506] Server  LOG     ○ Compiling / ...
+[00:00:25.706] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:00.138] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:04:16.536] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:13:10.730] Server  LOG     ✓ Compiled in 2s
+[00:13:17.595] Server  LOG     ✓ Compiled in 226ms
+[00:14:08.434] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./cart-admin-dashboard/app/admin/dashboard/page.jsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:14:08.435] Server  LOG     ✓ Compiled in 389ms
+[00:14:10.210] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:15:14.160] Server  LOG     ✓ Compiled in 144ms
+[00:15:19.678] Server  LOG     ✓ Compiled in 121ms
+[00:15:24.846] Server  LOG     ✓ Compiled in 126ms
+[00:21:39.512] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:22:49.309] Server  LOG     ✓ Compiled in 217ms
+[00:22:49.534] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold

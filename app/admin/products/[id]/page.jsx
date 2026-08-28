@@ -196,6 +196,7 @@ export default function ProductDetails() {
       const updates = {};
       const fields = [
         "name",
+        "sku",
         "stock",
         "regularPrice",
         "salePrice",
@@ -336,6 +337,18 @@ export default function ProductDetails() {
               value={editedProduct.name || ""}
               onChange={(e) => handleFieldChange("name", e.target.value)}
               disabled={isSubmitting}
+            />
+          </div>
+
+          {/* SKU */}
+          <div className="md:col-span-2">
+            <Label htmlFor="sku">SKU</Label>
+            <Input
+              id="sku"
+              value={editedProduct.sku || ""}
+              onChange={(e) => handleFieldChange("sku", e.target.value)}
+              disabled={isSubmitting}
+              placeholder="e.g. jamtee-lgheather-navy-xxl-665871194038"
             />
           </div>
 

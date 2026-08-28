@@ -207,10 +207,21 @@ export default function Sidebar() {
         )}
       >
         <Link href="/admin/dashboard" className="flex items-center gap-3 mb-6 sm:mb-8">
-          <img src="https://elipsestudio.com/club-pro/assets/clubpro_logo.webp" alt="Qist Market" className='w-100 h-15' />
+          <img src="/assets/images/clubpro_logo.webp" alt="ClubPro Manufacturing" className='w-100 h-15' />
 
         </Link>
         <nav className="flex-1">
+          <Link
+            href="/admin/dashboard"
+            className={cn(
+              'flex items-center gap-2 sm:gap-3 p-2 sm:p-3 mb-4 sm:mb-6 hover:bg-gray-700 rounded-lg transition-colors duration-200',
+              pathname === '/admin/dashboard' ? 'bg-gray-700 text-white' : 'text-gray-300'
+            )}
+            onClick={() => setIsOpen(false)}
+          >
+            <LayoutDashboard className="w-4 sm:w-5 h-4 sm:h-5" />
+            <span className="flex-1 text-sm sm:text-base">Dashboard</span>
+          </Link>
           {menuSections.map((section) => (
             <div key={section.section} className="mb-4 sm:mb-6">
               <h3 className="text-xs sm:text-sm font-semibold text-gray-400 uppercase tracking-wide mb-2 sm:mb-3">
