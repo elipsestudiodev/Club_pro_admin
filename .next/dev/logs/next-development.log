@@ -1,16 +1,15 @@
-[00:00:20.460] Server  LOG     ✓ Ready in 12.9s
-[00:00:23.506] Server  LOG     ○ Compiling / ...
-[00:00:25.706] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:00.138] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:04:16.536] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:13:10.730] Server  LOG     ✓ Compiled in 2s
-[00:13:17.595] Server  LOG     ✓ Compiled in 226ms
-[00:14:08.434] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./cart-admin-dashboard/app/admin/dashboard/page.jsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:14:08.435] Server  LOG     ✓ Compiled in 389ms
-[00:14:10.210] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:15:14.160] Server  LOG     ✓ Compiled in 144ms
-[00:15:19.678] Server  LOG     ✓ Compiled in 121ms
-[00:15:24.846] Server  LOG     ✓ Compiled in 126ms
-[00:21:39.512] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:22:49.309] Server  LOG     ✓ Compiled in 217ms
-[00:22:49.534] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:01.078] Server  LOG     ✓ Ready in 723ms
+[00:00:02.421] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:03.823] Browser WARN    Image with src "https://api.clubpromfg.com/uploads/products/dual_bottle_yamaha-scaled.webp" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:03.823] Browser WARN    Image with src "https://api.clubpromfg.com/uploads/products/dual_bottle_yamaha-scaled.webp" has "fill" and parent element with invalid "position". Provided "static" should be one of absolute,fixed,relative.
+[00:01:02.333] Server  LOG     ✓ Compiled in 580ms
+[00:01:27.905] Server  LOG     ✓ Compiled in 220ms
+[00:10:46.492] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:10:48.071] Browser WARN    Image with src "https://api.clubpromfg.com/uploads/products/dual_bottle_yamaha-scaled.webp" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:10:48.071] Browser WARN    Image with src "https://api.clubpromfg.com/uploads/products/dual_bottle_yamaha-scaled.webp" has "fill" and parent element with invalid "position". Provided "static" should be one of absolute,fixed,relative.
+[00:16:37.143] Server  LOG     ✓ Compiled in 127ms
+[00:17:36.865] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:32:04.469] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:34:08.616] Server  LOG     ✓ Compiled in 166ms
+[01:34:08.619] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./cart-admin-dashboard/lib/const.js changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[01:34:09.217] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold

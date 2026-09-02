@@ -114,7 +114,7 @@ __turbopack_context__.s([
     "baseUrl",
     ()=>baseUrl
 ]);
-const baseUrl = 'https://api.clubpromfg.com'; // export const baseUrl = 'http://localhost:5000';
+const baseUrl = 'http://localhost:5050'; // export const baseUrl = 'https://api.clubpromfg.com';
 }),
 "[project]/cart-admin-dashboard/lib/api.js [app-ssr] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
@@ -145,10 +145,7 @@ api.interceptors.request.use((config)=>{
     return config;
 });
 const formDataApi = __TURBOPACK__imported__module__$5b$project$5d2f$cart$2d$admin$2d$dashboard$2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].create({
-    baseURL: `${__TURBOPACK__imported__module__$5b$project$5d2f$cart$2d$admin$2d$dashboard$2f$lib$2f$const$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["baseUrl"]}/api`,
-    headers: {
-        'Content-Type': 'multipart/form-data'
-    }
+    baseURL: `${__TURBOPACK__imported__module__$5b$project$5d2f$cart$2d$admin$2d$dashboard$2f$lib$2f$const$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["baseUrl"]}/api`
 });
 formDataApi.interceptors.request.use((config)=>{
     const token = sessionStorage.getItem('DEVICE');

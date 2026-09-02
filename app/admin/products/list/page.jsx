@@ -33,6 +33,7 @@ import {
 const columns = [
   { key: "checkbox", label: "" },
   { key: "id", label: "ID" },
+  { key: "sku", label: "SKU" },
   { key: "name", label: "Product Name" },
   { key: "brand", label: "Brand" },
   { key: "model", label: "Model" },
@@ -332,6 +333,7 @@ export default function Products() {
                         />
                       </TableCell>
                       <TableCell className="font-medium">{row.id}</TableCell>
+                      <TableCell className="font-mono text-xs font-semibold text-gray-700">{row.sku || "-"}</TableCell>
                       <TableCell>{row.name}</TableCell>
                       <TableCell>{row.brand?.name || "-"}</TableCell>
                       <TableCell>{row.model?.name || "-"}</TableCell>

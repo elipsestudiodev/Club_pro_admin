@@ -1,8 +1,4 @@
 {
-  "/admin/dashboard/page": "app/admin/dashboard/page.js",
-  "/admin/products/create/page": "app/admin/products/create/page.js",
-  "/admin/products/list/page": "app/admin/products/list/page.js",
-  "/admin/registered-warranty/page": "app/admin/registered-warranty/page.js",
-  "/login/page": "app/login/page.js",
-  "/page": "app/page.js"
+  "/admin/products/[id]/page": "app/admin/products/[id]/page.js",
+  "/admin/products/list/page": "app/admin/products/list/page.js"
 }

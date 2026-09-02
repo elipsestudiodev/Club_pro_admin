@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import api from "@/lib/api";
+import api, { formDataApi } from "@/lib/api";
 import { X, Upload, Image as ImageIcon } from "lucide-react";
 
 // Updated schema to include images (files)
@@ -219,11 +219,7 @@ export default function AddProduct() {
         });
       }
 
-      await api.post("/create-product", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      await formDataApi.post("/create-product", formData);
 
       toast.success("Product created successfully!");
       form.reset();

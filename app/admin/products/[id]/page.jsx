@@ -21,7 +21,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import api from "@/lib/api";
+import api, { formDataApi } from "@/lib/api";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import { Upload, X, Image as ImageIcon } from "lucide-react";
 import Image from "next/image";
@@ -282,9 +282,7 @@ export default function ProductDetails() {
           (v, i) => v === null && product[Object.keys(imagePreviews)[i]],
         )
       ) {
-        await api.put(`/product/${id}`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        await formDataApi.put(`/product/${id}`, formData);
       }
 
       toast.success("Product updated successfully");
