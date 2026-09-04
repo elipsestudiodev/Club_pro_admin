@@ -1,15 +1,4 @@
-[00:00:01.078] Server  LOG     ✓ Ready in 723ms
-[00:00:02.421] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:03.823] Browser WARN    Image with src "https://api.clubpromfg.com/uploads/products/dual_bottle_yamaha-scaled.webp" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:03.823] Browser WARN    Image with src "https://api.clubpromfg.com/uploads/products/dual_bottle_yamaha-scaled.webp" has "fill" and parent element with invalid "position". Provided "static" should be one of absolute,fixed,relative.
-[00:01:02.333] Server  LOG     ✓ Compiled in 580ms
-[00:01:27.905] Server  LOG     ✓ Compiled in 220ms
-[00:10:46.492] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:10:48.071] Browser WARN    Image with src "https://api.clubpromfg.com/uploads/products/dual_bottle_yamaha-scaled.webp" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:10:48.071] Browser WARN    Image with src "https://api.clubpromfg.com/uploads/products/dual_bottle_yamaha-scaled.webp" has "fill" and parent element with invalid "position". Provided "static" should be one of absolute,fixed,relative.
-[00:16:37.143] Server  LOG     ✓ Compiled in 127ms
-[00:17:36.865] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:32:04.469] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:34:08.616] Server  LOG     ✓ Compiled in 166ms
-[01:34:08.619] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./cart-admin-dashboard/lib/const.js changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[01:34:09.217] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:04.734] Server  LOG     ✓ Ready in 3.3s
+[00:00:39.141] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:49.107] Browser ERROR   unhandledRejection: i: Failed to connect to MetaMask
+[00:00:49.107] Browser ERROR   unhandledRejection: i: Failed to connect to MetaMask

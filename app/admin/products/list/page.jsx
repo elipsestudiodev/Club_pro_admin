@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Papa from "papaparse";
 import { Button } from "@/components/ui/button";
 import api from "@/lib/api";
 import { toast } from "sonner";
@@ -15,7 +16,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { AlertCircle, MoreHorizontal } from "lucide-react";
+import { AlertCircle, MoreHorizontal, Download } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import {
@@ -91,6 +92,7 @@ export default function Products() {
   const [pendingAction, setPendingAction] = useState(null);
   const [singleDeleteId, setSingleDeleteId] = useState(null);
   const [flag, setFlag] = useState(true);
+  const [isExporting, setIsExporting] = useState(false);
 
   const [pagination, setPagination] = useState({
     currentPage: 1,
@@ -153,6 +155,71 @@ export default function Products() {
       setFlag(!flag);
     } catch {
       toast.error("Failed to update stock");
+    }
+  };
+
+  /* --------------------------- EXPORT ALL ------------------------------ */
+  const handleExportAll = async () => {
+    setIsExporting(true);
+    try {
+      const res = await api.get("/products", {
+        params: { page: 1, limit: 1000000, sort: "id", order: "asc" },
+      });
+      const all = res.data.data || [];
+
+      if (all.length === 0) {
+        toast.error("No products to export");
+        return;
+      }
+
+      const rows = all.map((p) => ({
+        ID: p.id,
+        SKU: p.sku || "",
+        Name: p.name,
+        Brand: p.brand?.name || "",
+        Model: p.model?.name || "",
+        Type: p.productType?.name || "",
+        Color: p.color || "",
+        Stock: p.stock,
+        "Regular Price": p.regularPrice,
+        "Sale Price": p.salePrice ?? "",
+        "Weight (lb)": p.weightLb,
+        "Length (in)": p.lengthIn,
+        "Width (in)": p.widthIn,
+        "Height (in)": p.heightIn,
+        Description: p.description || "",
+        "SEO Title": p.seoTitle || "",
+        "SEO Description": p.seoDescription || "",
+        "SEO Keywords": p.seoKeywords || "",
+        Slug: p.slug || "",
+        "Image 1": p.imageOne || "",
+        "Image 1 Alt": p.imgAltOne || "",
+        "Image 2": p.imageTwo || "",
+        "Image 2 Alt": p.imgAltTwo || "",
+        "Image 3": p.imageThree || "",
+        "Image 3 Alt": p.imgAltThree || "",
+        "Image 4": p.imageFour || "",
+        "Image 4 Alt": p.imgAltFour || "",
+        "Fishbowl Part Number": p.fishbowlPartNumber || "",
+        "Created At": p.createdAt || "",
+        "Updated At": p.updatedAt || "",
+      }));
+
+      const csv = Papa.unparse(rows);
+      const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `products-export-${new Date().toISOString().slice(0, 10)}.csv`;
+      link.click();
+      URL.revokeObjectURL(url);
+
+      toast.success(`Exported ${rows.length} products`);
+    } catch (err) {
+      console.error("Export failed:", err);
+      toast.error("Failed to export products");
+    } finally {
+      setIsExporting(false);
     }
   };
 
@@ -240,6 +307,14 @@ export default function Products() {
           {/* Optional: Keep bulk import if you have it */}
           <Button onClick={() => router.push("/admin/products/bulk-import")}>
             Bulk Import CSV
+          </Button>
+          <Button
+            variant="outline"
+            onClick={handleExportAll}
+            disabled={isExporting}
+          >
+            <Download className="mr-2 h-4 w-4" />
+            {isExporting ? "Exporting..." : "Export All Products"}
           </Button>
         </div>
       </div>
