@@ -110,11 +110,12 @@ module.exports = mod;
 "[project]/cart-admin-dashboard/lib/const.js [app-ssr] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
+// export const baseUrl = 'http://localhost:5050';
 __turbopack_context__.s([
     "baseUrl",
     ()=>baseUrl
 ]);
-const baseUrl = 'http://localhost:5050'; // export const baseUrl = 'https://api.clubpromfg.com';
+const baseUrl = 'https://api.clubpromfg.com';
 }),
 "[project]/cart-admin-dashboard/lib/api.js [app-ssr] (ecmascript)", ((__turbopack_context__) => {
 "use strict";

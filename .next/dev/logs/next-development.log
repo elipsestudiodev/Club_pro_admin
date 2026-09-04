@@ -2,3 +2,51 @@
 [00:00:39.141] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
 [00:00:49.107] Browser ERROR   unhandledRejection: i: Failed to connect to MetaMask
 [00:00:49.107] Browser ERROR   unhandledRejection: i: Failed to connect to MetaMask
+[00:20:48.015] Server  LOG     ✓ Compiled in 93ms
+[00:20:49.218] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./cart-admin-dashboard/lib/const.js changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:20:50.349] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:20:50.505] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/admin/pro..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/cart-admi...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
+-                         foxified-bridged=""
+-                         foxified=""
+                        >
+                          <body
+-                           cz-shortcut-listen="true"
+                          >
+                  ...
+
+[00:21:00.244] Browser WARN    Error restoring session {"cause":{},"name":"i"}
+[00:21:00.244] Browser WARN    Error restoring session {"cause":{},"name":"i"}
+[00:21:00.244] Browser ERROR   unhandledRejection: i: Failed to connect to MetaMask
+[00:21:00.244] Browser ERROR   unhandledRejection: i: Failed to connect to MetaMask
+[00:21:11.022] Browser ERROR   {"code":"ERR_NETWORK","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"https://api.clubpromfg.com/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxLCJmdWxsTmFtZSI6ImVsaXBzZSIsImVtYWlsIjoiZWxpcHNlQGdtYWlsLmNvbSIsInByb2ZpbGVQaWN0dXJlIjpudWxsLCJpc1N1cGVyIjp0cnVlLCJpc0FkbWluIjp0cnVlLCJpc0FjdGl2ZSI6dHJ1ZSwiaXNBY2Nlc3MiOiJMT1ciLCJpYXQiOjE3ODg1MjQyMzJ9.Fjxd0oT_weuH3qBPMFnGXt9tWwzGb88sKtiXX6tRhS8","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","params":{"limit":10,"order":"desc","page":1,"search":"","sort":"id"},"timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"silentJSONParsing":true},"url":"/products","xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Network Error","name":"AxiosError","stack":"AxiosError: Network Error\n    at XMLHttpRequest.handleError (http://localhost:4000/_next/static/chunks/248c9_d9067329._.js:5921:25)\n    at Axios.request (http://localhost:4000/_next/static/chunks/248c9_d9067329._.js:6679:49)\n    at async fetchProducts (http://localhost:4000/_next/static/chunks/cart-admin-dashboard_0faae314._.js:943:25)"}

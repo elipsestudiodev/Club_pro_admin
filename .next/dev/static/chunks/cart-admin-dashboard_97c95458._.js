@@ -2,11 +2,12 @@
 "[project]/cart-admin-dashboard/lib/const.js [app-client] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
+// export const baseUrl = 'http://localhost:5050';
 __turbopack_context__.s([
     "baseUrl",
     ()=>baseUrl
 ]);
-const baseUrl = 'http://localhost:5050'; // export const baseUrl = 'https://api.clubpromfg.com';
+const baseUrl = 'https://api.clubpromfg.com';
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
