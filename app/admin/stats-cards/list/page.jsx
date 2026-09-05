@@ -43,12 +43,9 @@ export default function StatsCardsList() {
     const [singleDeleteId, setSingleDeleteId] = useState(null);
     const [refresh, setRefresh] = useState(false);
 
-    const [pagination, setPagination] = useState({
-        page: 1,
-        limit: 10,
-        total: 0,
-        totalPages: 1,
-    });
+    const [page, setPage] = useState(1);
+    const [limit] = useState(10);
+    const [meta, setMeta] = useState({ total: 0, totalPages: 1 });
 
     const [search, setSearch] = useState("");
 
@@ -57,15 +54,14 @@ export default function StatsCardsList() {
         try {
             setLoading(true);
             const res = await api.get("/stats-cards/list", {
-                params: {
-                    page: pagination.page,
-                    limit: pagination.limit,
-                    search,
-                },
+                params: { page, limit, search, sort: "createdAt", order: "desc" },
             });
 
             setCards(res.data.data || []);
-            setPagination(res.data.pagination);
+            setMeta({
+                total: res.data.pagination?.total ?? 0,
+                totalPages: res.data.pagination?.totalPages ?? 1,
+            });
         } catch {
             toast.error("Failed to fetch stats cards");
         } finally {
@@ -75,7 +71,7 @@ export default function StatsCardsList() {
 
     useEffect(() => {
         fetchStatsCards();
-    }, [pagination.page, pagination.limit, search, refresh]);
+    }, [page, limit, search, refresh]);
 
     /* ---------------- ACTIONS ---------------- */
     const handleView = (id) => {
@@ -133,7 +129,7 @@ export default function StatsCardsList() {
                 value={search}
                 onChange={(e) => {
                     setSearch(e.target.value);
-                    setPagination((p) => ({ ...p, page: 1 }));
+                    setPage(1);
                 }}
             />
 
@@ -230,28 +226,26 @@ export default function StatsCardsList() {
                     {/* Pagination */}
                     <div className="flex justify-between items-center mt-6">
                         <p className="text-sm">
-                            Page {pagination.page} of {pagination.totalPages}
+                            Page {page} of {meta.totalPages}
                         </p>
-                        {pagination.totalPages > 1 && (
+                        {(page > 1 || page < meta.totalPages) && (
                             <div className="flex gap-2">
-                                <Button
-                                    variant="outline"
-                                    disabled={pagination.page === 1}
-                                    onClick={() =>
-                                        setPagination((p) => ({ ...p, page: p.page - 1 }))
-                                    }
-                                >
-                                    Previous
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    disabled={pagination.page === pagination.totalPages}
-                                    onClick={() =>
-                                        setPagination((p) => ({ ...p, page: p.page + 1 }))
-                                    }
-                                >
-                                    Next
-                                </Button>
+                                {page > 1 && (
+                                    <Button
+                                        variant="outline"
+                                        onClick={() => setPage((p) => p - 1)}
+                                    >
+                                        Previous
+                                    </Button>
+                                )}
+                                {page < meta.totalPages && (
+                                    <Button
+                                        variant="outline"
+                                        onClick={() => setPage((p) => p + 1)}
+                                    >
+                                        Next
+                                    </Button>
+                                )}
                             </div>
                         )}
                     </div>

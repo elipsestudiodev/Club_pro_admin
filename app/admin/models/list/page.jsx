@@ -256,7 +256,7 @@ export default function Models() {
                       <TableCell>{model.id}</TableCell>
                       <TableCell>{model.name}</TableCell>
                       <TableCell>{model.brand?.name || "-"}</TableCell>
-                      <TableCell>{model.products?.length || 0}</TableCell>
+                      <TableCell>{model._count?.products || 0}</TableCell>
                       <TableCell>
                         {columns.find((c) => c.key === "actions").render(model, {
                           onEdit: (id) => router.push(`/admin/models/${id}`),

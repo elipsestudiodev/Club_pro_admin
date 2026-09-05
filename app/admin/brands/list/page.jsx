@@ -290,8 +290,8 @@ export default function Brands() {
                       </TableCell>
                       <TableCell>{brand.id}</TableCell>
                       <TableCell>{brand.name}</TableCell>
-                      <TableCell>{brand.models?.length || 0}</TableCell>
-                      <TableCell>{brand.products?.length || 0}</TableCell>
+                      <TableCell>{brand._count?.models || 0}</TableCell>
+                      <TableCell>{brand._count?.products || 0}</TableCell>
                       <TableCell>
                         {columns.find((c) => c.key === "actions").render(brand, {
                           onDelete: (id) => {

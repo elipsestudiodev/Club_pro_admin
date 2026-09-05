@@ -232,7 +232,7 @@ export default function ProductTypes() {
                       </TableCell>
                       <TableCell>{type.id}</TableCell>
                       <TableCell>{type.name}</TableCell>
-                      <TableCell>{type.products?.length || 0}</TableCell>
+                      <TableCell>{type._count?.products || 0}</TableCell>
                       <TableCell>
                         {columns.find((c) => c.key === "actions").render(type, {
                           onDelete: (id) => {

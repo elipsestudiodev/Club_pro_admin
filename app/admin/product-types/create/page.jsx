@@ -19,17 +19,10 @@ import { toast } from "sonner";
 import api from "@/lib/api";
 
 const productTypeSchema = z.object({
-  name: z
-    .string()
-    .min(1, "Type name is required")
-    .trim()
-    .refine(
-      (val) => ["Soft Goods", "Accessories", "Hard Goods", "Enclosure"].includes(val),
-      {
-        message: "Must be one of: Soft Goods, Accessories, Hard Goods, Enclosure",
-      }
-    ),
+  name: z.string().min(1, "Type name is required").trim(),
 });
+
+const suggestedTypes = ["Soft Goods", "Accessories", "Hard Goods", "Enclosure"];
 
 export default function AddProductTypes() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,8 +33,6 @@ export default function AddProductTypes() {
       name: "",
     },
   });
-
-  const validTypes = ["Soft Goods", "Accessories", "Hard Goods", "Enclosure"];
 
   const onSubmit = async (data) => {
     setIsSubmitting(true);
@@ -78,18 +69,18 @@ export default function AddProductTypes() {
                       <FormLabel>Product Type</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="e.g. Accessories"
+                          placeholder="e.g. Soft Goods, Accessories, Hard Goods, Enclosure"
                           list="product-type-suggestions"
                           {...field}
                         />
                       </FormControl>
                       <datalist id="product-type-suggestions">
-                        {validTypes.map((type) => (
+                        {suggestedTypes.map((type) => (
                           <option key={type} value={type} />
                         ))}
                       </datalist>
                       <p className="text-sm text-muted-foreground mt-2">
-                        Allowed: Soft Goods, Accessories, Hard Goods, Enclosure
+                        Common types: {suggestedTypes.join(", ")} — or enter your own custom type name.
                       </p>
                       <FormMessage />
                     </FormItem>
