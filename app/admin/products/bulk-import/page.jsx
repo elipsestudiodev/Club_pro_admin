@@ -1,5 +1,6 @@
 'use client';
 import Papa from "papaparse";
+import readXlsxFile from "read-excel-file/browser";
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -18,6 +19,9 @@ export default function BulkImportPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [importErrors, setImportErrors] = useState([]);
+  const [sheets, setSheets] = useState([]); // [{ sheet, data }] when an .xlsx is uploaded
+  const [selectedSheet, setSelectedSheet] = useState('');
+  const [autoCreate, setAutoCreate] = useState(false);
 
   // Format numbers to whole numbers or decimals
   const formatNumber = (value) => {
@@ -91,39 +95,90 @@ export default function BulkImportPage() {
   };
 
 
-  const onDrop = useCallback((acceptedFiles) => {
-  const file = acceptedFiles[0];
-  if (!file) return;
-
-  Papa.parse(file, {
-    header: true,
-    skipEmptyLines: true,
-    delimiter: "", // auto-detects comma or tab
-    complete: (results) => {
-      const fields = (results.meta.fields || []).filter((h) => h && h !== "S no");
-      const nameCol = nameHeader(fields);
-      if (!nameCol) {
-        toast.error('CSV must have a "Name" column');
-        return;
-      }
-      // Keep the original CSV line number so errors can point at the right row
-      const data = results.data
-        .map((row, i) => ({ ...row, __row: i + 2 }))
-        .filter((row) => String(row[nameCol] || '').trim());
-
-      setImportErrors([]);
-      setHeaders(fields);
-      setCsvData(data);
-    },
-    error: (err) => {
-      console.error("CSV Parse Error:", err);
+  // Load a table (header list + row objects) into the preview. `firstLine` is the
+  // spreadsheet line number of the first data row, used in error messages.
+  const loadTable = (fields, rows, firstLine = 2) => {
+    fields = fields.filter((h) => h && h !== "S no");
+    const nameCol = nameHeader(fields);
+    if (!nameCol) {
+      toast.error('File must have a "Name" column');
+      setHeaders([]);
+      setCsvData([]);
+      return;
     }
-  });
-}, []);
+    const data = rows
+      .map((row, i) => ({ ...row, __row: i + firstLine }))
+      .filter((row) => String(row[nameCol] || '').trim());
+
+    setImportErrors([]);
+    setHeaders(fields);
+    setCsvData(data);
+  };
+
+  const cellToString = (v) => {
+    if (v === null || v === undefined) return '';
+    if (v instanceof Date) return v.toISOString();
+    return String(v);
+  };
+
+  const loadSheet = (sheet) => {
+    const [headerRow = [], ...rest] = sheet.data;
+    const fields = headerRow.map((h) => cellToString(h).trim());
+    const rows = rest.map((r) => {
+      const obj = {};
+      fields.forEach((h, i) => { if (h) obj[h] = cellToString(r[i]); });
+      return obj;
+    });
+    setSelectedSheet(sheet.sheet);
+    loadTable(fields, rows);
+  };
+
+  const onDrop = useCallback(async (acceptedFiles) => {
+    const file = acceptedFiles[0];
+    if (!file) return;
+
+    if (/\.xlsx$/i.test(file.name)) {
+      try {
+        const all = await readXlsxFile(file);
+        // Only sheets whose first row has a "Name" column can be imported
+        const usable = all.filter((s) =>
+          nameHeader((s.data[0] || []).map((h) => cellToString(h)))
+        );
+        if (usable.length === 0) {
+          toast.error('No sheet in this file has a "Name" column');
+          return;
+        }
+        setSheets(usable);
+        // Default to the sheet with the most rows (the master list)
+        loadSheet(usable.reduce((a, b) => (b.data.length > a.data.length ? b : a)));
+      } catch (err) {
+        console.error("Excel Parse Error:", err);
+        toast.error('Could not read the Excel file');
+      }
+      return;
+    }
+
+    setSheets([]);
+    setSelectedSheet('');
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      delimiter: "", // auto-detects comma or tab
+      complete: (results) => loadTable(results.meta.fields || [], results.data),
+      error: (err) => {
+        console.error("CSV Parse Error:", err);
+        toast.error('Could not read the CSV file');
+      },
+    });
+  }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: { 'text/csv': ['.csv'] },
+    accept: {
+      'text/csv': ['.csv'],
+      'application/vnd.ms-excel': ['.csv'],
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
+    },
     disabled: isLoading,
   });
 
@@ -166,6 +221,7 @@ export default function BulkImportPage() {
         const batch = productsData.slice(i, i + batchSize);
         const response = await api.post('/products/import-csv', {
           products: batch,
+          autoCreate,
         });
 
         createdCount += response.data.created || 0;
@@ -214,7 +270,7 @@ export default function BulkImportPage() {
           Cancel
         </Button>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <h1 className="text-2xl sm:text-3xl font-bold">Bulk Import CSV</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold">Bulk Import CSV / Excel</h1>
           <Button onClick={downloadSample} variant="outline" size="sm">
             Download Sample CSV
           </Button>
@@ -233,14 +289,43 @@ export default function BulkImportPage() {
         <p className="text-sm sm:text-base text-gray-600">
           {isDragActive
             ? 'Drop the CSV file here...'
-            : 'Drag & drop CSV file here, or click to select'}
+            : 'Drag & drop a CSV or Excel (.xlsx) file here, or click to select'}
         </p>
+      </div>
+
+      <div className="mt-4 flex flex-col sm:flex-row sm:items-center gap-4">
+        {sheets.length > 0 && (
+          <label className="flex items-center gap-2 text-sm">
+            <span className="font-medium">Sheet:</span>
+            <select
+              value={selectedSheet}
+              onChange={(e) => loadSheet(sheets.find((s) => s.sheet === e.target.value))}
+              disabled={isLoading}
+              className="border rounded-md px-2 py-1 text-sm"
+            >
+              {sheets.map((s) => (
+                <option key={s.sheet} value={s.sheet}>
+                  {s.sheet} ({Math.max(0, s.data.length - 1)} rows)
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
+        <label className="flex items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            checked={autoCreate}
+            onChange={(e) => setAutoCreate(e.target.checked)}
+            disabled={isLoading}
+          />
+          Auto-create missing Brand / Model / Type
+        </label>
       </div>
 
       {csvData.length > 0 && (
         <div className="mt-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
-            <h2 className="text-xl font-semibold">CSV Preview</h2>
+            <h2 className="text-xl font-semibold">Preview ({csvData.length} products)</h2>
             <div className="flex gap-2 w-full sm:w-auto">
               {isLoading && (
                 <div className="flex items-center gap-2 text-sm">

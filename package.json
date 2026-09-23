@@ -2,12 +2,12 @@
   "name": "qist-market-main-admin-dashboard",
   "version": "0.1.0",
   "private": true,
- "scripts": {
-  "dev": "next dev -p 4000",    
-  "build": "next build",        
-  "start": "next start -p 4000", 
-  "lint": "eslint ."
-},
+  "scripts": {
+    "dev": "next dev -p 4000",
+    "build": "next build",
+    "start": "next start -p 4000",
+    "lint": "eslint ."
+  },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
     "@lexical/react": "^0.35.0",
@@ -45,6 +45,7 @@
     "react-dropzone": "^14.3.8",
     "react-hook-form": "^7.62.0",
     "react-quill-new": "^3.6.0",
+    "read-excel-file": "^9.3.10",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1",
     "zod": "^4.1.0"
