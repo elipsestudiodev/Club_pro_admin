@@ -26,9 +26,9 @@ export default function BulkImportPage() {
   // Format numbers to whole numbers or decimals
   const formatNumber = (value) => {
     if (typeof value !== 'string' && typeof value !== 'number') return value;
-    const num = parseFloat(value);
-    if (isNaN(num)) return value;
-    return num.toString();
+    // Only format purely numeric cells; "1776959031209-738439632.webp" must stay as-is
+    if (!/^\s*-?\d+(\.\d+)?\s*$/.test(String(value))) return value;
+    return parseFloat(value).toString();
   };
 
   // Master sheet column (normalized: lowercase, letters/digits only) -> API field.
