@@ -17,6 +17,7 @@ export default function BulkImportPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [importErrors, setImportErrors] = useState([]);
 
   // Format numbers to whole numbers or decimals
   const formatNumber = (value) => {
@@ -26,26 +27,68 @@ export default function BulkImportPage() {
     return num.toString();
   };
 
+  // Master sheet column (normalized: lowercase, letters/digits only) -> API field.
+  // Matches the columns produced by "Export All Products".
+  const HEADER_MAP = {
+    id: 'id',
+    sku: 'sku',
+    name: 'name', productname: 'name',
+    brand: 'brand',
+    model: 'model',
+    type: 'type', producttype: 'type',
+    color: 'color',
+    stock: 'stock', qty: 'stock', quantity: 'stock',
+    regularprice: 'regularPrice', price: 'regularPrice',
+    saleprice: 'salePrice',
+    weightlb: 'weightLb', weight: 'weightLb',
+    lengthin: 'lengthIn', length: 'lengthIn',
+    widthin: 'widthIn', width: 'widthIn',
+    heightin: 'heightIn', height: 'heightIn',
+    description: 'description',
+    seotitle: 'seoTitle',
+    seodescription: 'seoDescription',
+    seokeywords: 'seoKeywords',
+    slug: 'slug',
+    image1: 'imageOne', imageone: 'imageOne',
+    image1alt: 'imgAltOne', imgaltone: 'imgAltOne',
+    image2: 'imageTwo', imagetwo: 'imageTwo',
+    image2alt: 'imgAltTwo', imgalttwo: 'imgAltTwo',
+    image3: 'imageThree', imagethree: 'imageThree',
+    image3alt: 'imgAltThree', imgaltthree: 'imgAltThree',
+    image4: 'imageFour', imagefour: 'imageFour',
+    image4alt: 'imgAltFour', imgaltfour: 'imgAltFour',
+    fishbowlpartnumber: 'fishbowlPartNumber', fishbowlpart: 'fishbowlPartNumber',
+  };
+  const normalizeHeader = (h) => String(h || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  const fieldFor = (header) => HEADER_MAP[normalizeHeader(header)];
+  const nameHeader = (fields) => fields.find((h) => fieldFor(h) === 'name');
+
   const downloadSample = () => {
-  const csvContent = `Brand,Model,Type,Name,Color,Stock,Sale Price,Regular Price
-Yamaha,Drive2,Enclosure,3 x 4 Universal Enclosure,Red,10,1500,1800
-EZGO,TXT,Accessories,Seat Cover,,25,120,150
-Club Car,Onward,Hard Goods,Battery Charger,,5,850,950
-`;
+    const rows = [
+      {
+        ID: '', SKU: 'BC20R', Name: '3 x 4 Universal Enclosure', Brand: 'ClubPro', Model: '2 Passenger Universal',
+        Type: 'Enclosure', Color: 'Red', Stock: 12, 'Regular Price': 215, 'Sale Price': 0,
+        'Weight (lb)': 15, 'Length (in)': 28, 'Width (in)': 22, 'Height (in)': 3,
+        Description: 'Fits all standard size golf cars', 'SEO Title': '', 'SEO Description': '', 'SEO Keywords': '', Slug: '',
+        'Image 1': '3x4_universal_enclosure_red.jpg', 'Image 1 Alt': '', 'Image 2': '', 'Image 2 Alt': '',
+        'Image 3': '', 'Image 3 Alt': '', 'Image 4': '', 'Image 4 Alt': '', 'Fishbowl Part Number': '',
+      },
+    ];
+    const csvContent = Papa.unparse(rows);
 
-  const blob = new Blob([csvContent], {
-    type: "text/csv;charset=utf-8;",
-  });
+    const blob = new Blob(["﻿" + csvContent], {
+      type: "text/csv;charset=utf-8;",
+    });
 
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
 
-  link.href = url;
-  link.download = "sample_products.csv";
-  link.click();
+    link.href = url;
+    link.download = "sample_products.csv";
+    link.click();
 
-  URL.revokeObjectURL(url);
-};
+    URL.revokeObjectURL(url);
+  };
 
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -57,11 +100,19 @@ Club Car,Onward,Hard Goods,Battery Charger,,5,850,950
     skipEmptyLines: true,
     delimiter: "", // auto-detects comma or tab
     complete: (results) => {
-      const data = results.data.filter(
-        (row) => row.Name || row.name
-      );
+      const fields = (results.meta.fields || []).filter((h) => h && h !== "S no");
+      const nameCol = nameHeader(fields);
+      if (!nameCol) {
+        toast.error('CSV must have a "Name" column');
+        return;
+      }
+      // Keep the original CSV line number so errors can point at the right row
+      const data = results.data
+        .map((row, i) => ({ ...row, __row: i + 2 }))
+        .filter((row) => String(row[nameCol] || '').trim());
 
-      setHeaders(results.meta.fields.filter(h => h !== "S no"));
+      setImportErrors([]);
+      setHeaders(fields);
       setCsvData(data);
     },
     error: (err) => {
@@ -87,27 +138,15 @@ Club Car,Onward,Hard Goods,Battery Charger,,5,850,950
   };
 
   const handleBulkUpload = async () => {
-    const productsData = csvData.map((row) => ({
-  name: row.Name,
-  brand: row.Brand,
-  model: row.Model,
-  type: row.Type,
-  color: row.Color || null,
-  stock: row.Stock,
-  imageOne: row.imageOne,
-  imageTwo: row.imageTwo,
-  imageThree: row.imageThree,
-  imageFour: row.imageFour,
-  salePrice: row["Sale Price"],
-  regularPrice: row["Regular Price"],
-  weightLb:row.weightLb,
-  lengthIn:row.lengthIn,
-  widthIn:row.widthIn,
-  heightIn:row.heightIn,
-  description:row.description,
-}));
-
-
+    // Send only columns present in the CSV so the backend doesn't blank out others
+    const productsData = csvData.map((row) => {
+      const product = { _row: row.__row };
+      headers.forEach((header) => {
+        const field = fieldFor(header);
+        if (field) product[field] = row[header] ?? '';
+      });
+      return product;
+    });
 
     if (productsData.length === 0) {
       toast.error('No valid products found in CSV');
@@ -115,10 +154,13 @@ Club Car,Onward,Hard Goods,Battery Charger,,5,850,950
     }
 
     setIsLoading(true);
+    setImportErrors([]);
     try {
-      const batchSize = 100;
+      const batchSize = 25;
       let createdCount = 0;
+      let updatedCount = 0;
       let skippedCount = 0;
+      const errors = [];
 
       for (let i = 0; i < productsData.length; i += batchSize) {
         const batch = productsData.slice(i, i + batchSize);
@@ -126,19 +168,29 @@ Club Car,Onward,Hard Goods,Battery Charger,,5,850,950
           products: batch,
         });
 
-        createdCount += response.data.created;
-        skippedCount += response.data.skipped;
+        createdCount += response.data.created || 0;
+        updatedCount += response.data.updated || 0;
+        skippedCount += response.data.skipped || 0;
+        errors.push(...(response.data.errors || []));
 
-        setProgress(Math.round(((i + batchSize) / productsData.length) * 100));
+        setProgress(Math.min(100, Math.round(((i + batchSize) / productsData.length) * 100)));
       }
 
-      toast.success(
-        `Products imported successfully: ${createdCount} created, ${skippedCount} skipped`
-      );
-      router.push('/admin/products/list');
+      const summary = `${createdCount} created, ${updatedCount} updated, ${skippedCount} failed`;
+      if (errors.length > 0) {
+        setImportErrors(errors);
+        toast.warning(`Import finished with errors: ${summary}`);
+      } else {
+        toast.success(`Products imported successfully: ${summary}`);
+        router.push('/admin/products/list');
+      }
     } catch (error) {
       console.error('Error importing products:', error);
-      toast.error(error.response?.data?.message || 'Failed to import products');
+      toast.error(
+        error.response?.data?.error ||
+          error.response?.data?.message ||
+          'Failed to import products'
+      );
     } finally {
       setIsLoading(false);
       setProgress(0);
@@ -206,6 +258,21 @@ Club Car,Onward,Hard Goods,Battery Charger,,5,850,950
               </Button>
             </div>
           </div>
+
+          {importErrors.length > 0 && (
+            <div className="mb-4 border border-red-300 bg-red-50 rounded-lg p-4 max-h-72 overflow-y-auto">
+              <p className="font-semibold text-red-700 mb-2">
+                {importErrors.length} row(s) were not imported:
+              </p>
+              <ul className="text-sm text-red-700 space-y-1">
+                {importErrors.map((e, idx) => (
+                  <li key={idx}>
+                    Row {e.row}{e.name ? ` (${e.name})` : ''}: {e.message}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <div className="border rounded-lg overflow-x-auto">
             <Table>
