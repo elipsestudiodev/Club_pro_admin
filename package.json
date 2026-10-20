@@ -2,12 +2,12 @@
   "name": "qist-market-main-admin-dashboard",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev -p 4000",
-    "build": "next build",
-    "start": "next start -p 4000",
-    "lint": "eslint ."
-  },
+ "scripts": {
+  "dev": "next dev -p 4000",    
+  "build": "next build",        
+  "start": "next start -p 4000", 
+  "lint": "eslint ."
+},
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
     "@lexical/react": "^0.35.0",
