@@ -58,6 +58,7 @@ export default function Sidebar() {
           subItems: [
             { name: 'Create Product', path: '/admin/products/create' },
             { name: 'Product List', path: '/admin/products/list' },
+            { name: 'Image Sync (Club Pro)', path: '/admin/products/image-sync' },
 
           ],
         },

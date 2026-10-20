@@ -308,6 +308,9 @@ export default function Products() {
           <Button onClick={() => router.push("/admin/products/bulk-import")}>
             Bulk Import CSV
           </Button>
+          <Button variant="outline" onClick={() => router.push("/admin/products/image-sync")}>
+            Image Sync (Club Pro)
+          </Button>
           <Button
             variant="outline"
             onClick={handleExportAll}
